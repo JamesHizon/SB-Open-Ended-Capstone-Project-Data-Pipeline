@@ -3,6 +3,14 @@
 ![alt text](https://www.xenonstack.com/images/wp-content/uploads/building-big-data-pipeline-aws-xenonstack.png)
 
 ### To run the file, perform the following inside Terminal. Note that we are dealing with Python Version 3.
+### First, we need to download the necessary Python packages, if not already installed.
+
+```
+pip install requests
+pip install bs4
+```
+
+### Next, change to the desired working directory and run our Python script.
 
 ```
 cd Step 3 - Data Collection
