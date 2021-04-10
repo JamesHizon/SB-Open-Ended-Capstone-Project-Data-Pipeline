@@ -13,7 +13,7 @@ pip install bs4
 ### Next, change to the desired working directory and run our Python script.
 
 ```
-cd Step 3 - Data Collection
+cd Step_3_Data_Collection
 python3 Project_Data_Collection.py
 ```
 
