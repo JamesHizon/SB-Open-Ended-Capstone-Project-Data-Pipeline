@@ -1,6 +1,6 @@
 # Web Scraping using Python to scrape data from website:
 
-# Import packages (include in description):
+# Import packages
 import requests
 from bs4 import BeautifulSoup
 import time
