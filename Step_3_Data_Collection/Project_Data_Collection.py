@@ -45,6 +45,12 @@ for link in soup.find_all('a')[2:16]: # Do we still need to use array slicing?
                     response = requests.get(download_url)
                     file.write(response.content)
                     logging.info('Files have been downloaded as ZIP.')
+
+                # Next:
+                # - Convert files from ZIP to CSV within folder:
+                # Try:
+                # - Loop through all files inside the file folder.
+
     except Exception as e:
         logging.error(f"Error was {e}")
 
