@@ -3,11 +3,10 @@
 # Import packages
 import requests
 from bs4 import BeautifulSoup
-import time
 import datetime
 import sys
 import logging
-import zipfile
+
 
 # Control logging levels:
 logging.basicConfig(level=logging.INFO)
