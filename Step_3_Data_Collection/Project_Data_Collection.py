@@ -7,7 +7,6 @@ import datetime
 import sys
 import logging
 
-
 # Control logging levels:
 logging.basicConfig(level=logging.INFO)
 
