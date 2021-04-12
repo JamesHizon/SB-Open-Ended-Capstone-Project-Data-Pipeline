@@ -4,8 +4,9 @@
 import requests
 from bs4 import BeautifulSoup
 import datetime
-import sys
 import logging
+# import zipfile
+import pandas as pd
 
 # Control logging levels:
 logging.basicConfig(level=logging.INFO)
@@ -41,16 +42,18 @@ for link in soup.find_all('a')[2:16]: # Do we still need to use array slicing?
             # Loop through values that have the date within file name.
             for date in file:
                 download_url = f"{base_url}{file}"
-                with open(f"{file}", "wb") as file:
+                with open(f"{file}", "wb") as zip_file:
                     response = requests.get(download_url)
-                    file.write(response.content)
+                    zip_file.write(response.content)
                     logging.info('Files have been downloaded as ZIP.')
-
-                # Next:
-                # - Convert files from ZIP to CSV within folder:
-                # Try:
-                # - Loop through all files inside the file folder.
-
+                    # Unzip to CSV file
+                    # with open(f"{file.rstrip('.zip')}", "wb") as csv_file:
+                    #     csv_file.write(zip_file.content)  # Write file content to csv_file
+                    with open(f"{file.rstrip('.zip')}") as csv_file:
+                        csv_df = pd.read_csv(csv_file, header=0, delimiter="\t")
+                        # Apply compression to csv:
+                        compression_opts = dict(method='zip', archive_name=csv_file)
+                        csv_df.to_csv(f"{file}", index=False, compression=compression_opts)
     except Exception as e:
         logging.error(f"Error was {e}")
 
