@@ -8,6 +8,7 @@
 ```
 pip install requests
 pip install bs4
+pip install logging
 ```
 
 ### Next, change to the desired working directory and run our Python script.
