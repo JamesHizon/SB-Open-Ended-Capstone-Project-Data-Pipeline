@@ -1,4 +1,5 @@
-# SB-Open-Ended-Capstone-Project-Data-Pipeline
+# Springboard Open-Ended Capstone Project Data Pipeline
+## Step 3: Data Collection
 
 ![alt text](https://www.xenonstack.com/images/wp-content/uploads/building-big-data-pipeline-aws-xenonstack.png)
 
