@@ -4,7 +4,9 @@
 ![alt text](https://www.xenonstack.com/images/wp-content/uploads/building-big-data-pipeline-aws-xenonstack.png)
 
 ### To run the file, perform the following inside Terminal. Note that we are dealing with Python Version 3.
-### First, we need to download the necessary Python packages, if not already installed.
+### First, we need to download the necessary Python packages, if not already installed. Also, check the requirements.txt
+### for files listed in my virtual environment. Not all packages are needed, but you can see the version number of each
+### Python package.
 
 ```
 pip install requests
