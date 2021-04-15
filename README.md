@@ -23,5 +23,7 @@ python3 Project_Data_Collection.py
 
 ### Then, check for files inside the directory "Step 3 - Data Collection".
 ### The output of the Python script should include the time it takes to download each file and a log output.
-### Currently, I am trying to figure out where to introduce logging inside my Python script.
+
+### Next Step:
+##### If I want to optimize code for efficiency, I should figure out how to go straight from finding "a" tags to finding "href" tags directly. Then, the time complexity of code will be O(N) from O(N^2).
 
