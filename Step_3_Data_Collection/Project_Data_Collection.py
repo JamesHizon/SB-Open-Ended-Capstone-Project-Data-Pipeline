@@ -26,10 +26,9 @@ base_url = "http://data.gdeltproject.org/gkg/"
 # Current Directory
 current_directory = os.getcwd()
 
-# Iterate to obtain all 14 files we want to download based on "a" and "href" tags and write to file
-
 if __name__ == "__main__":
 
+    # Iterate to obtain all we want to download based on "a" and "href" tags and write to CSV file
     for link in soup.find_all("a"):
         try:
             if link.has_attr("href"):
