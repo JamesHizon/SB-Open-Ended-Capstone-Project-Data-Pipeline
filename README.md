@@ -1,4 +1,7 @@
 # Springboard Open-Ended Capstone Project Data Pipeline
+
+### In this repository, I will include each step of the data pipeline.
+
 ## Step 3: Data Collection
 
 ![alt text](https://www.xenonstack.com/images/wp-content/uploads/building-big-data-pipeline-aws-xenonstack.png)
@@ -22,6 +25,18 @@ python3 Project_Data_Collection.py
 ### Then, check for files inside the directory "Step 3 - Data Collection".
 ### The output of the Python script should include the time it takes to download each file and a log output.
 
-### Next Step:
-##### If I want to optimize code for efficiency, I should figure out how to go straight from finding "a" tags to finding "href" tags directly. Then, the time complexity of code will be O(N) from O(N^2).
+
+## Step 5: Prototype Data Pipeline
+
+### Within the folder "Step_5_Prototype_Data_Pipeline," we will find the Python script we want to work with. To run the file, change the working directory and then run the Python script as follows.
+
+```
+cd Step_5_Prototype_Data_Pipeline
+python3 Step5_Capstone_Project.py
+```
+
+### After running the Python script, we should have received our desired output which is similar to what we did in Step 3. Our next step is to update our code
+### so that we will automate data loading into Amazon S3 via S3 bucket.
+
+
 
