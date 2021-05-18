@@ -21,8 +21,18 @@ class DataPipeline:
     """
 
     def __init__(self, s3_obj, url):
+        """
+        "__init__" method will simply take the listed inputs as well as create logging file
+        to store logging metrics.
+
+        :param s3_obj: S3 bucket object will be used to upload data in later method.
+        :param url: Object will be used to scrape data.
+        """
         self.s3_obj = s3_obj
         self.url = url
+        # Create logging file
+        logging.basicConfig(filename="dp_file.log", level=logging.DEBUG)
+        logging.info("Data Pipeline has been created!")
 
     def extract_load_data(self, use_cloud, cloud_path):
         """
@@ -37,7 +47,7 @@ class DataPipeline:
         logging.basicConfig(level=logging.INFO)
         # Extract data from HTML webpage
         url = self.url
-        page = requests.get(URL)
+        page = requests.get(url)
         # Create BeautifulSoup object to parse through HTML document
         soup = BeautifulSoup(page.content, "html.parser")
         # Base url for file downloading
@@ -70,9 +80,9 @@ class DataPipeline:
                                 response = requests.get(download_url)
                                 # Write content to zip_file
                                 zip_file.write(response.content)
+                                logging.info(f"Filename of '{file}' has been downloaded.")
                                 # Deal with both cases (using AWS or not)
                                 if use_cloud is False:
-                                    logging.info("Zip file has been downloaded.")
                                     # Use after creating zipfile to unpack as a CSV
                                     with zipfile.ZipFile(f"{file}", "r") as zip_ref:
                                         # INSTEAD OF EXTRACTING ALL TO CURRENT DIRECTORY, WE MAY NEED TO
