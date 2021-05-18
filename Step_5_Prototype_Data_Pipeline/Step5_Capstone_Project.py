@@ -43,8 +43,6 @@ class DataPipeline:
 
         :return: Logging statement after extracting files from website.
         """
-        # Control logging levels:
-        logging.basicConfig(level=logging.INFO)
         # Extract data from HTML webpage
         url = self.url
         page = requests.get(url)
