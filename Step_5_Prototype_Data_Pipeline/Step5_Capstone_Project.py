@@ -1,6 +1,6 @@
-# Data Pipeline Class
+# Data Pipeline Prototype with Classes
 
-# Standard Imports
+# Standard library imports
 import os
 import datetime
 import logging
@@ -10,39 +10,31 @@ import zipfile
 from bs4 import BeautifulSoup
 import requests
 import boto3
+import pandas as pd
 
 
 class DataPipeline:
     """
     This DataPipeline class will simply be used to take an website url as a data source and
-    an S3 object as a possible data storage destination.
-
-    The method that will be used is "extract_load_data()," which will take in
+    an S3 object as a possible data storage destination. An ETL method is also created with
+    description as follows.
     """
 
     def __init__(self, s3_obj, url):
-        """
-        "__init__" method will simply take the listed inputs as well as create logging file
-        to store logging metrics.
-
-        :param s3_obj: S3 bucket object will be used to upload data in later method.
-        :param url: Object will be used to scrape data.
-        """
         self.s3_obj = s3_obj
         self.url = url
-        # Create logging file
-        logging.basicConfig(filename="dp_file.log", level=logging.DEBUG)
-        logging.info("Data Pipeline has been created!")
 
-    def extract_load_data(self, use_cloud, cloud_path):
+    def extract_transform_load(self, use_cloud, cloud_path):
         """
         This function will take an optional parameter "use_cloud" (BOOLEAN) and "cloud_path" to store files onto AWS S3.
         If the "use_cloud" parameter is true, then we will write to cloud location "cloud_path".
         For the case of Step 5 where we do not use cloud, we will simply set "use_cloud" to
-        False and "cloud_path" can just be any variable since we are not using it.
+            False and "cloud_path" can just be any variable since we are not using it.
 
         :return: Logging statement after extracting files from website.
         """
+        # Control logging levels:
+        logging.basicConfig(level=logging.INFO)
         # Extract data from HTML webpage
         url = self.url
         page = requests.get(url)
@@ -78,19 +70,35 @@ class DataPipeline:
                                 response = requests.get(download_url)
                                 # Write content to zip_file
                                 zip_file.write(response.content)
-                                logging.info(f"Filename of '{file}' has been downloaded.")
                                 # Deal with both cases (using AWS or not)
                                 if use_cloud is False:
+                                    logging.info("Zip file has been downloaded.")
                                     # Use after creating zipfile to unpack as a CSV
                                     with zipfile.ZipFile(f"{file}", "r") as zip_ref:
-                                        # INSTEAD OF EXTRACTING ALL TO CURRENT DIRECTORY, WE MAY NEED TO
-                                        # UPLOAD DIRECTLY TO S3 (THIS IS THE STEP WHERE WE WILL UPLOAD TO S3.
+                                        # INSTEAD OF EXTRACTING ALL DATA TO CURRENT DIRECTORY, WE MAY NEED TO
+                                        # UPLOAD DIRECTLY TO S3 (THIS IS THE STEP WHERE WE WILL UPLOAD TO S3).
                                         zip_ref.extractall(current_directory)
+                                        # LOGIC TO TRANSFORM DATA USING PANDAS:
+                                        # 1) SINCE FILE IS NOW IN CURRENT DIRECTORY, LET US USE PANDAS TO READ FILE.
+                                        # 2) THEN, WE PERFORM ESSENTIAL DATA TRANSFORMATION (REMOVE NULL VALUES).
+                                        # 3) CREATE NEW CSV FILE.
+                                        file_path = current_directory + "/" + str(file)
+                                        file_df = pd.read_csv(file_path)
+                                        file_df = file_df.dropna()
                                 else:
                                     # Load file to cloud path if use_cloud parameter is True
                                     # (I will update this part of the code later on to deal w/ S3 bucket).
                                     with zipfile.ZipFile(f"{file}", "r") as zip_ref:
-                                        zip_ref.extractall(cloud_path)
+                                        # TRY TO DO SAME STEPS AS BEFORE WHERE WE EXTRACT ALL OF OUR DATA INTO CURRENT DIRECTORY,
+                                        # APPLY DATA TRANSFORMATIONS, AND LOAD TO CLOUD (S3).
+                                        zip_ref.extractall(current_directory)
+                                        file_path = current_directory + "/" + str(file)
+                                        file_df = pd.read_csv(file_path)
+                                        file_df = file_df.dropna()
+                                        # USE CLOUD PATH TO UPLOAD DIRECTLY TO S3
+                                        cloud_file_path = cloud_path + "/" + str(file)
+                                        file_df.to_csv(cloud_file_path)
+                                        # zip_ref.extractall(cloud_path)  # Previously, I used this (delete this line of code later.)
                             logging.info("File has been downloaded and unpacked as CSV.")
                 logging.info("All files have been downloaded.")
             except Exception as e:
@@ -106,5 +114,10 @@ website_url = "http://data.gdeltproject.org/gkg/index.html"
 # Create data pipeline (use s3 object as input)
 dp = DataPipeline(s3, website_url)
 
-# Run extract_load_data method to scrape and download the data from HTML document
-dp.extract_load_data(use_cloud=False, cloud_path=None)
+# Run extract_load_data method to scrape and download the data from HTML document:
+# dp.extract_transform_load(use_cloud=False, cloud_path=None)
+
+# Next:
+# 1) Update logic of code to properly deal with S3 bucket.
+# 2) Update other information such as access key for S3 client.
+# 3) I will work more on this later, when I am required to scale data pipeline to cloud.
